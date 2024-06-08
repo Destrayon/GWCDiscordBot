@@ -20,7 +20,7 @@ namespace GWCDiscordBot
         }
         public async Task StartAsync()
         {
-            //DatabaseManager.InitializeDatabase("dbcreation.sql");
+            DatabaseManager.InitializeDatabase("dbcreation.sql");
 
             string botToken = _config["DiscordSettings:BotToken"] ?? "";
 

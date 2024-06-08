@@ -20,8 +20,8 @@ client.Log += Log;
 ServiceCollection services = new ServiceCollection();
 
 services.AddSingleton(client)
-        .AddSingleton(x => client.GetGuild(guildId))
-        .AddSingleton(x => (SocketTextChannel)client.GetChannel(playerInfoChannelId))
+        .AddSingleton<IGuild>(x => client.GetGuild(guildId))
+        .AddSingleton<ITextChannel>(x => (SocketTextChannel)client.GetChannel(playerInfoChannelId))
         .AddSingleton<IConfiguration>(config)
         .AddSingleton<UserChecker>()
         .AddSingleton<RunBotChecker>();
