@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using GWCDiscordBot.Database;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
