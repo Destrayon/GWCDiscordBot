@@ -41,6 +41,14 @@ namespace GWCDiscordBot
 
             List<ulong> offendingUsers = new List<ulong>();
 
+            foreach (ulong userId in _usersMessaged)
+            {
+                if (!_usersJoined.Contains(userId))
+                {
+                    _usersMessaged.Remove(userId);
+                }
+            }
+
             foreach (ulong userId in _usersJoined)
             {
                 if (!_usersMessaged.Contains(userId))
@@ -61,7 +69,7 @@ namespace GWCDiscordBot
             DateTime joinedAtFilter = DateTime.Now - TimeSpan.FromSeconds(_userFilterInSeconds);
 
             _usersJoined = (await _guild.GetUsersAsync())
-                .Where(u => u.JoinedAt.HasValue && u.JoinedAt.Value >= joinedAtFilter)
+                .Where(u => u.JoinedAt.HasValue && u.JoinedAt.Value >= joinedAtFilter && !u.IsBot)
                 .Select(x => x.Id)
                 .ToList();
         }

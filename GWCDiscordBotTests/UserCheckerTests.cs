@@ -77,6 +77,7 @@ namespace GWCDiscordBotTests
             var mockUser = new Mock<IGuildUser>();
             mockUser.Setup(u => u.Id).Returns(id);
             mockUser.Setup(u => u.JoinedAt).Returns(joinedAt);
+            mockUser.Setup(u => u.IsBot).Returns(false);
             return mockUser.Object;
         }
 

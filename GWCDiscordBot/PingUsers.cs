@@ -97,11 +97,13 @@ namespace GWCDiscordBot
 
             foreach(OffendingUser user in  _listOfNotifyAdmins) 
             {
-                userMentions += $"<@{user.DiscordId}>";
+                userMentions += $"<@{user.DiscordId}> ";
                 user.HasEscalated = true;
 
                 user.AddObjectInTransaction();
             }
+
+            userMentions.TrimEnd(' ');
 
             await _adminChannel.SendMessageAsync(userMentions);
 
