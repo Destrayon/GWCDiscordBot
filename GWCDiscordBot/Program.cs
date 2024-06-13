@@ -5,6 +5,7 @@ using GWCDiscordBot;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Channels;
 
+ManualResetEvent readyEvent = new ManualResetEvent(false);
 
 IConfigurationRoot config = new ConfigurationBuilder()
     .SetBasePath(AppContext.BaseDirectory)
@@ -13,24 +14,47 @@ IConfigurationRoot config = new ConfigurationBuilder()
 
 ulong guildId = ulong.Parse(config["DiscordSettings:GuildId"] ?? "0");
 ulong playerInfoChannelId = ulong.Parse(config["DiscordSettings:PlayerInfoChannelId"] ?? "0");
+ulong adminChannelId = ulong.Parse(config["DiscordSettings:AdminChannelId"] ?? "0");
+string botToken = config["DiscordSettings:BotToken"] ?? "";
 
 DiscordSocketClient client = new();
 client.Log += Log;
+client.Ready += OnReady;
 
-ServiceCollection services = new ServiceCollection();
+await client.LoginAsync(TokenType.Bot, botToken);
+await client.StartAsync();
 
-services.AddSingleton(client)
-        .AddSingleton<IGuild>(x => client.GetGuild(guildId))
-        .AddSingleton<ITextChannel>(x => (SocketTextChannel)client.GetChannel(playerInfoChannelId))
-        .AddSingleton<IConfiguration>(config)
-        .AddSingleton<UserChecker>()
-        .AddSingleton<RunBotChecker>();
+readyEvent.WaitOne();
 
-DefaultServiceProviderFactory serviceProviderFactory = new DefaultServiceProviderFactory();
+await client.StopAsync();
 
-IServiceProvider serviceProvider = serviceProviderFactory.CreateServiceProvider(services);
+Environment.Exit(0);
 
-await serviceProvider.GetRequiredService<RunBotChecker>().StartAsync();
+async Task OnReady()
+{
+    ServiceCollection services = new ServiceCollection();
+
+    SocketGuild guild = client.GetGuild(guildId);
+    SocketTextChannel playerInfoChannel = (SocketTextChannel)guild.GetChannel(playerInfoChannelId);
+    SocketTextChannel adminChannel = (SocketTextChannel)guild.GetChannel(adminChannelId);
+
+    services.AddSingleton(client)
+            .AddSingleton<IGuild>(guild)
+            .AddKeyedSingleton<ITextChannel>("PlayerInfoChannel", playerInfoChannel)
+            .AddKeyedSingleton<ITextChannel>("AdminChannel", adminChannel)
+            .AddSingleton<IConfiguration>(config)
+            .AddSingleton<UserChecker>()
+            .AddSingleton<RunBotChecker>()
+            .AddSingleton<PingUsers>();
+
+    DefaultServiceProviderFactory serviceProviderFactory = new DefaultServiceProviderFactory();
+
+    IServiceProvider serviceProvider = serviceProviderFactory.CreateServiceProvider(services);
+
+    await serviceProvider.GetRequiredService<RunBotChecker>().StartAsync();
+
+    readyEvent.Set();
+}
 
 Task Log(LogMessage msg)
 {

@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace GWCDiscordBot
 
         private HashSet<ulong> _usersMessaged;
 
-        public UserChecker(IGuild guild, ITextChannel channel, IConfiguration config)
+        public UserChecker(IGuild guild, [FromKeyedServices("PlayerInfoChannel")] ITextChannel channel, IConfiguration config)
         {
             _guild = guild;
             _channel = channel;

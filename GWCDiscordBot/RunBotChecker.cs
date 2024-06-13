@@ -12,22 +12,21 @@ namespace GWCDiscordBot
 {
     public class RunBotChecker
     {
-        private DiscordSocketClient _client;
-        private IConfiguration _config;
-        public RunBotChecker(DiscordSocketClient client, IConfiguration config) 
+        private readonly DiscordSocketClient _client;
+        private readonly IConfiguration _config;
+        private readonly PingUsers _pingUsers;
+
+        public RunBotChecker(DiscordSocketClient client, IConfiguration config, PingUsers pingUsers) 
         { 
             _client = client;
             _config = config;
+            _pingUsers = pingUsers;
         }
         public async Task StartAsync()
         {
             DatabaseManager.InitializeDatabase("dbcreation.sql");
 
-            string botToken = _config["DiscordSettings:BotToken"] ?? "";
-
-            await _client.LoginAsync(TokenType.Bot, botToken);
-            await _client.StartAsync();
-            await Task.Delay(-1);
+            await _pingUsers.SendPings();
         }
     }
 }

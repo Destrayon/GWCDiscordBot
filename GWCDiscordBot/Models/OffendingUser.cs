@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace GWCDiscordBot.Models
 {
-    public struct OffendingUser
+    public class OffendingUser
     {
-        public ulong Id { get; init; }
+        public ulong? Id { get; init; }
 
-        public ulong DiscordId { get; init; }
+        public required ulong DiscordId { get; init; }
 
-        public int PingAmount { get; set; }
+        public required int PingAmount { get; set; }
+
+        public required bool HasEscalated { get; set; }
     }
 }

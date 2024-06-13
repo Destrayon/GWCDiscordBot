@@ -1,7 +1,9 @@
 ﻿using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,7 +49,7 @@ namespace GWCDiscordBot.Database
             });
         }
 
-        public static int SaveObjectsInTheTransaction()
+        public static int SaveObjectsInTransaction()
         {
             using SqliteConnection conn = new SqliteConnection($"Data Source={_databasePath}");
 
@@ -86,6 +88,42 @@ namespace GWCDiscordBot.Database
                 conn.Close();
 
                 queries.Clear();
+            }
+        }
+
+        public static DataTable ExecuteQuery(string sqlStatement, List<SqliteParameter>? parameters = null)
+        {
+            using SqliteConnection conn = new SqliteConnection($"Data Source={_databasePath}");
+
+            conn.Open();
+
+            using SqliteCommand cmd = conn.CreateCommand();
+
+            cmd.CommandText = sqlStatement;
+
+            if (parameters != null)
+            {
+                cmd.Parameters.AddRange(parameters);
+            }
+
+            using SqliteDataReader reader = cmd.ExecuteReader();
+
+            DataTable dataTable = new DataTable();
+            dataTable.Load(reader);
+
+            return dataTable;
+        }
+
+        public static bool ConvertSqliteStringToBool(string boolEquivalent)
+        {
+            switch(boolEquivalent)
+            {
+                case "0":
+                    return false;
+                case "1":
+                    return true;
+                default:
+                    throw new ArgumentException();
             }
         }
     }
