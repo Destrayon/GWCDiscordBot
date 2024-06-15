@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GWCDiscordBot", "GWCDiscordBot\GWCDiscordBot.csproj", "{1164E45C-6754-4542-A8D0-29DD6EEE72D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWCDiscordBot", "GWCDiscordBot\GWCDiscordBot.csproj", "{1164E45C-6754-4542-A8D0-29DD6EEE72D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GWCDiscordBotTests", "GWCDiscordBotTests\GWCDiscordBotTests.csproj", "{EE44827C-067F-438C-ABE8-A49DDC5C69C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{1164E45C-6754-4542-A8D0-29DD6EEE72D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1164E45C-6754-4542-A8D0-29DD6EEE72D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1164E45C-6754-4542-A8D0-29DD6EEE72D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE44827C-067F-438C-ABE8-A49DDC5C69C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE44827C-067F-438C-ABE8-A49DDC5C69C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE44827C-067F-438C-ABE8-A49DDC5C69C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE44827C-067F-438C-ABE8-A49DDC5C69C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
