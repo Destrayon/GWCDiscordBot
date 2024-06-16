@@ -9,7 +9,8 @@ ManualResetEvent readyEvent = new ManualResetEvent(false);
 
 IConfigurationRoot config = new ConfigurationBuilder()
     .SetBasePath(AppContext.BaseDirectory)
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables()
     .Build();
 
 ulong guildId = ulong.Parse(config["DiscordSettings:GuildId"] ?? "0");
@@ -27,8 +28,6 @@ await client.StartAsync();
 readyEvent.WaitOne();
 
 await client.StopAsync();
-
-Environment.Exit(0);
 
 async Task OnReady()
 {
